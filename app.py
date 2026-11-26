@@ -113,20 +113,23 @@ st.markdown(
             background-color: #e5c14c !important;
             color: #000000 !important;
         }
+        [data-testid="stToolbar"] {
+           display: none;
+        }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading titles...")
 def load_engine(path="ott_recommendation_engine.pkl"):
     with open(path,"rb") as f:
         engine=pickle.load(f)
     return engine["data"],engine["matrix"]
 
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_labels(_df):
     #most voted titles come first in the dropdown
     order=_df["imdb_votes"].fillna(0).sort_values(ascending=False).index
